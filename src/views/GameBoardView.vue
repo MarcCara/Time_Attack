@@ -1,7 +1,11 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { useGameStore } from '@/stores/game'
 import KeyPad from '../components/KeyPad.vue'
 import ResultsTable from '../components/ResultsTable.vue'
+
+const store = useGameStore()
+const nom = ref('')
 
 const tecles = ['A', 'S', 'D', 'F']
 const tempsObjectiu = {
@@ -17,6 +21,13 @@ const partidaAcabada = computed(() => resultats.value.length === tecles.length)
 const teclesPremudes = computed(() => resultats.value.map((resultat) => resultat.tecla))
 
 let tempsInici = 0
+
+function entrar() {
+  const nomNetejat = nom.value.trim()
+  if (nomNetejat === '') return
+
+  store.guardarNom(nomNetejat)
+}
 
 function iniciarPartida() {
   resultats.value = []
@@ -42,6 +53,9 @@ function rebreTecla(tecla) {
 
   if (partidaAcabada.value) {
     jugant.value = false
+
+    const errorTotal = resultats.value.reduce((total, resultat) => total + resultat.error, 0)
+    store.guardarPartida(Number(errorTotal.toFixed(2)))
   }
 }
 
@@ -67,30 +81,47 @@ onUnmounted(() => {
     <section class="game-card" :class="{ 'game-card--results': partidaAcabada }" aria-labelledby="game-title">
       <p class="eyebrow">Partida ràpida <span>·</span> Un jugador</p>
       <h1 id="game-title">Time Attack</h1>
-      <p v-if="!jugant && !partidaAcabada" class="instructions">
-        Prem les tecles A, S, D i F quan creguis que han passat 2, 4, 5 i 7 segons.
-      </p>
-      <p v-else-if="jugant" class="instructions">Prem cada tecla una vegada. El temps no es mostra.</p>
-      <p v-else class="instructions">Partida acabada. Aquests són els teus resultats:</p>
+      <form v-if="!store.nomJugador" class="player-form" @submit.prevent="entrar">
+        <h2 class="welcome-title">Benvingut a TIME ATTACK!</h2>
+        <label class="sr-only" for="player-name">Nom del jugador</label>
+        <input
+          id="player-name"
+          v-model="nom"
+          autocomplete="name"
+          maxlength="40"
+          placeholder="Introdueix el teu nom"
+          required
+        />
+        <button class="start-button" type="submit">Entrar al joc</button>
+      </form>
 
-      <button v-if="!jugant && !partidaAcabada" class="start-button" type="button" @click="iniciarPartida">
-        Iniciar partida
-      </button>
-      <KeyPad
-        v-else-if="jugant"
-        :tecles="tecles"
-        :premudes="teclesPremudes"
-        @premuda="rebreTecla"
-      />
+      <template v-else>
+        <h2 class="player-greeting">Hola, {{ store.nomJugador }}!</h2>
+        <p v-if="!jugant && !partidaAcabada" class="instructions">
+          Prem les tecles A, S, D i F quan creguis que han passat 2, 4, 5 i 7 segons.
+        </p>
+        <p v-else-if="jugant" class="instructions">Prem cada tecla una vegada. El temps no es mostra.</p>
+        <p v-else class="instructions">Partida acabada. Aquests són els teus resultats:</p>
 
-      <ResultsTable
-        v-if="!jugant && resultats.length === tecles.length"
-        :resultats="resultats"
-      />
+        <button v-if="!jugant && !partidaAcabada" class="start-button" type="button" @click="iniciarPartida">
+          Iniciar partida
+        </button>
+        <KeyPad
+          v-else-if="jugant"
+          :tecles="tecles"
+          :premudes="teclesPremudes"
+          @premuda="rebreTecla"
+        />
 
-      <button v-if="partidaAcabada" class="start-button replay-button" type="button" @click="iniciarPartida">
-        Tornar a jugar
-      </button>
+        <ResultsTable
+          v-if="!jugant && resultats.length === tecles.length"
+          :resultats="resultats"
+        />
+
+        <button v-if="partidaAcabada" class="start-button replay-button" type="button" @click="iniciarPartida">
+          Tornar a jugar
+        </button>
+      </template>
     </section>
   </main>
 </template>
@@ -158,6 +189,57 @@ onUnmounted(() => {
 
 .game-card--results .instructions {
   margin-block: 0.85rem 1rem;
+}
+
+.player-form {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.welcome-title,
+.player-greeting {
+  margin: 0;
+  color: #e8edf7;
+  font-size: clamp(1.15rem, 4vw, 1.4rem);
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.player-greeting {
+  margin-top: 1rem;
+}
+
+.player-form input {
+  width: min(100%, 22rem);
+  min-height: 3.25rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--stroke);
+  border-radius: 0.65rem;
+  background: rgb(7 12 21 / 55%);
+  color: #f3f5fa;
+  font: inherit;
+}
+
+.player-form input::placeholder {
+  color: #8996aa;
+}
+
+.player-form input:focus-visible {
+  border-color: var(--accent);
+  outline: 3px solid rgb(255 154 118 / 25%);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
 }
 
 .eyebrow {
