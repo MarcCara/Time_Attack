@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useGameStore } from '@/stores/game'
 import KeyPad from '../components/KeyPad.vue'
 import ResultsTable from '../components/ResultsTable.vue'
+import ScoreBoard from '../components/ScoreBoard.vue'
 
 const store = useGameStore()
 const nom = ref('')
@@ -81,6 +82,7 @@ onUnmounted(() => {
     <section class="game-card" :class="{ 'game-card--results': partidaAcabada }" aria-labelledby="game-title">
       <p class="eyebrow">Partida ràpida <span>·</span> Un jugador</p>
       <h1 id="game-title">Time Attack</h1>
+      <ScoreBoard />
       <form v-if="!store.nomJugador" class="player-form" @submit.prevent="entrar">
         <h2 class="welcome-title">Benvingut a TIME ATTACK!</h2>
         <label class="sr-only" for="player-name">Nom del jugador</label>
