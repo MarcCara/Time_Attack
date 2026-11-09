@@ -10,11 +10,15 @@ export const useGameStore = defineStore('game', () => {
   }
 
   function guardarPartida(errorTotal) {
-    partides.value.push({
+    partides.value.unshift({
       id: partides.value.length + 1,
       nom: nomJugador.value,
       errorTotal,
     })
+  }
+
+  function esborrarPartides() {
+    partides.value = []
   }
 
   return {
@@ -22,5 +26,6 @@ export const useGameStore = defineStore('game', () => {
     partides,
     guardarNom,
     guardarPartida,
+    esborrarPartides,
   }
 })
