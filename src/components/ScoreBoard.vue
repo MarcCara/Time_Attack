@@ -8,6 +8,9 @@ const millorMarca = computed(() => {
 
   return Math.min(...store.partides.map((partida) => partida.errorTotal))
 })
+const classificacioOrdenada = computed(() =>
+  [...store.classificacio].sort((a, b) => a.errorTotal - b.errorTotal),
+)
 </script>
 
 <template>
@@ -54,18 +57,24 @@ const millorMarca = computed(() => {
     <section class="scoreboard" aria-labelledby="global-scoreboard-title">
       <h2 id="global-scoreboard-title">Classificació global</h2>
       <p v-if="store.classificacio.length === 0" class="empty-message">
-        Encara no hi ha resultats compartits.
+        Encara no hi ha resultats. Sigues el primer a jugar!
       </p>
       <div v-else class="table-wrapper">
         <table>
           <thead>
             <tr>
+              <th scope="col">Posició</th>
               <th scope="col">Jugador</th>
               <th scope="col">Error total</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(resultat, index) in store.classificacio" :key="index">
+            <tr
+              v-for="(resultat, index) in classificacioOrdenada"
+              :key="`${resultat.nom}-${index}`"
+              :class="{ 'top-result': index === 0 }"
+            >
+              <td>{{ index + 1 }}</td>
               <td>{{ resultat.nom }}</td>
               <td>{{ resultat.errorTotal }} s</td>
             </tr>
@@ -157,6 +166,19 @@ tbody tr:last-child td {
 tbody td:last-child {
   color: var(--accent-bright);
   font-weight: 700;
+}
+
+.top-result {
+  background: rgb(255 118 94 / 10%);
+}
+
+.top-result td {
+  color: #ffd0c3;
+  font-weight: 700;
+}
+
+.top-result td:last-child {
+  color: var(--accent-bright);
 }
 
 .clear-button {
