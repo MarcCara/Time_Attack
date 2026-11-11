@@ -57,7 +57,13 @@ function rebreTecla(tecla) {
     jugant.value = false
 
     const errorTotal = resultats.value.reduce((total, resultat) => total + resultat.error, 0)
-    store.guardarPartida(Number(errorTotal.toFixed(2)))
+    const errorFinal = Number(errorTotal.toFixed(2))
+
+    store.guardarPartida(errorFinal)
+    socket.emit('resultat', {
+      nom: store.nomJugador,
+      errorTotal: errorFinal,
+    })
   }
 }
 
