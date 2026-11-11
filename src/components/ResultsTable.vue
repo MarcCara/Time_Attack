@@ -32,11 +32,11 @@ defineProps({
 
 <style scoped>
 .table-wrapper {
-  margin: 1rem -0.5rem 0;
+  margin: 1.15rem -0.25rem 0;
   overflow-x: auto;
-  border: 1px solid var(--stroke);
-  border-radius: 0.8rem;
-  background: rgb(7 12 21 / 30%);
+  border: 1px solid #d5c9b4;
+  border-radius: 0.4rem;
+  background: #fffdf7;
 }
 
 table {
@@ -48,16 +48,17 @@ table {
 
 th,
 td {
-  padding: 0.55rem 0.75rem;
-  border-bottom: 1px solid var(--stroke);
+  padding: 0.6rem 0.65rem;
+  border-bottom: 1px solid #e6dece;
 }
 
 th {
-  background: rgb(255 255 255 / 3%);
+  background: #f1e9d8;
   color: var(--text-muted);
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.06em;
+  text-align: left;
   text-transform: uppercase;
 }
 
@@ -66,11 +67,11 @@ tbody tr {
 }
 
 tbody tr:hover {
-  background: rgb(255 255 255 / 3%);
+  background: #f8f1e4;
 }
 
 tbody td {
-  color: #e2e8f1;
+  color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
 
@@ -79,14 +80,14 @@ tbody tr:last-child td {
 }
 
 tbody td:last-child {
-  color: var(--accent-bright);
+  color: var(--accent);
   font-weight: 700;
 }
 
 @media (max-width: 480px) {
   th,
   td {
-    padding: 0.55rem 0.5rem;
+    padding: 0.55rem 0.45rem;
     font-size: 0.8rem;
   }
 }

@@ -49,17 +49,15 @@ button {
   min-width: 0;
   aspect-ratio: 1;
   padding: 0.5rem;
-  border: 1px solid var(--stroke);
-  border-radius: clamp(0.65rem, 3vw, 0.85rem);
-  background:
-    radial-gradient(circle at 50% 0%, rgb(255 255 255 / 7%), transparent 65%),
-    linear-gradient(145deg, #202c41, #151e2f);
-  color: #f3f5fa;
+  border: 1px solid #b9ac94;
+  border-radius: 0.35rem 0.45rem 0.3rem 0.5rem;
+  background: #f4eddd;
+  color: var(--ink);
   font: inherit;
   font-size: clamp(1.1rem, 5vw, 1.4rem);
   font-weight: 750;
   cursor: pointer;
-  box-shadow: 0 0.45rem 0 #090e18, 0 0.6rem 1.2rem rgb(0 0 0 / 20%);
+  box-shadow: 0 4px 0 #c6b99f;
   transition:
     background 140ms ease,
     border-color 140ms ease,
@@ -69,35 +67,32 @@ button {
 }
 
 button:not(:disabled):hover {
-  border-color: rgb(255 118 94 / 70%);
-  background:
-    radial-gradient(circle at 50% 0%, rgb(255 154 118 / 18%), transparent 65%),
-    linear-gradient(145deg, #3a3042, #251f32);
-  color: #fff;
-  box-shadow: 0 0.55rem 0 #090e18, 0 0.8rem 1.5rem rgb(255 118 94 / 12%);
-  transform: translateY(-2px);
+  border-color: var(--accent);
+  background: #fff9eb;
+  box-shadow: 0 2px 0 #c6b99f;
+  transform: translateY(2px);
 }
 
 button:not(:disabled):active {
-  box-shadow: 0 0.15rem 0 #090e18;
-  transform: translateY(0.25rem);
+  box-shadow: none;
+  transform: translateY(4px);
 }
 
 button:focus-visible {
-  outline: 3px solid var(--accent-bright);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
 
 button:disabled {
   cursor: not-allowed;
-  border-color: rgb(164 183 213 / 8%);
-  background: #111827;
-  color: #778398;
+  border-color: #ded5c4;
+  background: #e8e1d3;
+  color: #aaa18f;
   box-shadow: none;
 }
 
 button:not(:disabled) {
-  border-color: rgb(164 183 213 / 24%);
+  border-color: #b9ac94;
 }
 
 @media (prefers-reduced-motion: reduce) {

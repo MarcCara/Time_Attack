@@ -1,32 +1,43 @@
 :root {
-  font-family: Inter, "Segoe UI", Arial, sans-serif;
-  color: #f3f5fa;
-  background: #080d18;
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: #29291f;
+  background: #e9e1d0;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --surface: #101827;
-  --surface-raised: #151f31;
-  --stroke: rgb(164 183 213 / 16%);
-  --text-muted: #a0acc0;
-  --accent: #ff765e;
-  --accent-bright: #ff9a76;
+  --paper: #fffaf0;
+  --paper-shade: #f3ead8;
+  --ink: #29291f;
+  --text-muted: #77715f;
+  --stroke: #d7cdb9;
+  --accent: #c65337;
+  --accent-bright: #a9412d;
+  --olive: #65704c;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  min-width: 320px;
+  background: #e9e1d0;
+}
+
 body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
-  background:
-    radial-gradient(ellipse at 50% -15%, rgb(49 91 151 / 32%), transparent 55%),
-    radial-gradient(ellipse at 90% 100%, rgb(142 54 61 / 14%), transparent 42%),
-    #080d18;
+  background-color: #e9e1d0;
+  background-image:
+    radial-gradient(#8d7653 0.45px, transparent 0.55px),
+    linear-gradient(110deg, transparent 48%, rgb(255 255 255 / 28%) 49%, transparent 50%);
+  background-position: 0 0, center;
+  background-size: 7px 7px, 100% 100%;
+  color: var(--ink);
+  line-height: 1.5;
 }
 
 button {
@@ -34,6 +45,6 @@ button {
 }
 
 ::selection {
-  color: #080d18;
-  background: #ff9a76;
+  color: var(--paper);
+  background: var(--accent);
 }

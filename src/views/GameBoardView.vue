@@ -108,158 +108,229 @@ onUnmounted(() => {
 
 <template>
   <main class="game-board">
-    <section class="game-card" :class="{ 'game-card--results': partidaAcabada }" aria-labelledby="game-title">
-      <p class="eyebrow">Partida ràpida <span>·</span> Un jugador</p>
-      <h1 id="game-title">Time Attack</h1>
+    <div class="page-layout">
+      <header class="page-header">
+        <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true">✳</span> Un joc de precisió</p>
+        <h1 id="game-title">Time <span>Attack</span></h1>
+        <p class="intro-copy">Confia en el teu ritme. Prem cada tecla quan creguis que ha passat el temps.</p>
+      </header>
+
+      <section class="game-card" :class="{ 'game-card--results': partidaAcabada }" aria-labelledby="game-title">
+        <div class="card-topline">
+          <span>{{ jugant ? 'Partida en curs' : partidaAcabada ? 'Partida acabada' : 'A punt?' }}</span>
+          <span class="card-index">Núm. 01</span>
+        </div>
+        <form v-if="!store.nomJugador" class="player-form" @submit.prevent="entrar">
+          <h2 class="welcome-title">Com et dius?</h2>
+          <p class="form-copy">Escriu el teu nom abans de començar.</p>
+          <label class="sr-only" for="player-name">Nom del jugador</label>
+          <input
+            id="player-name"
+            v-model="nom"
+            autocomplete="name"
+            maxlength="40"
+            placeholder="El teu nom"
+            required
+          />
+          <button class="start-button" type="submit">Entrar al joc</button>
+        </form>
+
+        <template v-else>
+          <h2 class="player-greeting">Hola, {{ store.nomJugador }}!</h2>
+          <p v-if="!jugant && !partidaAcabada" class="instructions">
+            Prem A, S, D i F quan creguis que han passat 2, 4, 5 i 7 segons.
+          </p>
+          <p v-else-if="jugant" class="instructions">Prem cada tecla una vegada. El temps no es mostra.</p>
+          <p v-else class="instructions">Aquests són els resultats d'aquesta partida:</p>
+
+          <button v-if="!jugant && !partidaAcabada" class="start-button" type="button" @click="iniciarPartida">
+            Iniciar partida
+          </button>
+          <KeyPad
+            v-else-if="jugant"
+            :tecles="tecles"
+            :premudes="teclesPremudes"
+            @premuda="rebreTecla"
+          />
+
+          <ResultsTable
+            v-if="!jugant && resultats.length === tecles.length"
+            :resultats="resultats"
+          />
+
+          <button v-if="partidaAcabada" class="start-button replay-button" type="button" @click="iniciarPartida">
+            Tornar a jugar
+          </button>
+        </template>
+      </section>
+
       <ScoreBoard />
-      <form v-if="!store.nomJugador" class="player-form" @submit.prevent="entrar">
-        <h2 class="welcome-title">Benvingut a TIME ATTACK!</h2>
-        <label class="sr-only" for="player-name">Nom del jugador</label>
-        <input
-          id="player-name"
-          v-model="nom"
-          autocomplete="name"
-          maxlength="40"
-          placeholder="Introdueix el teu nom"
-          required
-        />
-        <button class="start-button" type="submit">Entrar al joc</button>
-      </form>
-
-      <template v-else>
-        <h2 class="player-greeting">Hola, {{ store.nomJugador }}!</h2>
-        <p v-if="!jugant && !partidaAcabada" class="instructions">
-          Prem les tecles A, S, D i F quan creguis que han passat 2, 4, 5 i 7 segons.
-        </p>
-        <p v-else-if="jugant" class="instructions">Prem cada tecla una vegada. El temps no es mostra.</p>
-        <p v-else class="instructions">Partida acabada. Aquests són els teus resultats:</p>
-
-        <button v-if="!jugant && !partidaAcabada" class="start-button" type="button" @click="iniciarPartida">
-          Iniciar partida
-        </button>
-        <KeyPad
-          v-else-if="jugant"
-          :tecles="tecles"
-          :premudes="teclesPremudes"
-          @premuda="rebreTecla"
-        />
-
-        <ResultsTable
-          v-if="!jugant && resultats.length === tecles.length"
-          :resultats="resultats"
-        />
-
-        <button v-if="partidaAcabada" class="start-button replay-button" type="button" @click="iniciarPartida">
-          Tornar a jugar
-        </button>
-      </template>
-    </section>
+      <footer class="page-footer">Una mica de sort. Molta intuïció.</footer>
+    </div>
   </main>
 </template>
 
 <style scoped>
 .game-board {
-  position: relative;
-  isolation: isolate;
-  display: grid;
   min-height: 100vh;
   min-height: 100svh;
-  place-items: center;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: clamp(1.5rem, 5vh, 3rem) 1.25rem;
+  padding: clamp(1.5rem, 5vw, 4rem) 1.25rem;
 }
 
-.game-board::before,
-.game-board::after {
+.page-layout {
+  display: grid;
+  width: min(100%, 68rem);
+  grid-template-columns: minmax(0, 1.05fr) minmax(19rem, 0.95fr);
+  grid-template-areas:
+    "header header"
+    "game scores"
+    "footer footer";
+  align-items: start;
+  gap: 1.4rem 2rem;
+  margin: 0 auto;
+}
+
+.page-header {
+  position: relative;
+  grid-area: header;
+  padding: 1rem 0 0.75rem;
+  border-bottom: 1px solid #c9bda7;
+}
+
+.page-header::after {
   position: absolute;
-  z-index: -1;
-  width: 22rem;
-  aspect-ratio: 1;
-  border: 1px solid rgb(164 183 213 / 7%);
+  right: 0.25rem;
+  bottom: -0.65rem;
+  width: 4.5rem;
+  height: 1rem;
+  border-top: 2px solid var(--accent);
   border-radius: 50%;
   content: "";
-  pointer-events: none;
+  transform: rotate(-4deg);
 }
 
-.game-board::before {
-  top: -13rem;
-  left: -9rem;
-  box-shadow: 0 0 0 2.5rem rgb(164 183 213 / 2%), 0 0 0 5rem rgb(164 183 213 / 2%);
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.45rem;
+  color: var(--olive);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
-.game-board::after {
-  right: -14rem;
-  bottom: -16rem;
-  width: 32rem;
-  border-color: rgb(255 118 94 / 8%);
-  box-shadow: 0 0 0 3rem rgb(255 118 94 / 2%), 0 0 0 6rem rgb(255 118 94 / 2%);
+.eyebrow-mark {
+  color: var(--accent);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.page-header h1 {
+  margin: 0;
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3rem, 8vw, 5.8rem);
+  font-weight: 700;
+  letter-spacing: -0.075em;
+  line-height: 0.95;
+}
+
+.page-header h1 span {
+  color: var(--accent);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.intro-copy {
+  margin: 0.75rem 0 0;
+  color: var(--text-muted);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.05rem;
 }
 
 .game-card {
   position: relative;
-  width: min(100%, 35rem);
-  padding: clamp(2.25rem, 7vw, 3.5rem) clamp(1.25rem, 6vw, 2.75rem);
-  border: 1px solid rgb(164 183 213 / 20%);
-  border-radius: 1.5rem;
-  background:
-    radial-gradient(ellipse at 50% 0%, rgb(255 255 255 / 4%), transparent 55%),
-    linear-gradient(145deg, rgb(21 31 49 / 96%), rgb(13 20 33 / 98%));
+  grid-area: game;
+  min-width: 0;
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  border: 1px solid #cfc2ac;
+  border-radius: 0.85rem 0.75rem 0.95rem 0.7rem;
+  background: var(--paper);
+  box-shadow: 5px 6px 0 #cbbda5;
   text-align: center;
-  box-shadow: 0 2rem 6rem rgb(0 0 0 / 38%), inset 0 1px rgb(255 255 255 / 4%);
-  animation: card-enter 500ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform: rotate(-0.25deg);
 }
 
 .game-card--results {
-  padding-block: 1.75rem;
+  padding-block: 1.35rem;
 }
 
-.game-card--results .eyebrow {
-  margin-bottom: 0.65rem;
+.card-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px dashed #d1c5b0;
+  color: var(--olive);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-align: left;
+  text-transform: uppercase;
 }
 
-.game-card--results .instructions {
-  margin-block: 0.85rem 1rem;
+.card-index {
+  color: #a49a87;
+  font-size: 0.65rem;
 }
 
 .player-form {
   display: grid;
   justify-items: center;
-  gap: 1rem;
+  gap: 0.8rem;
   margin-top: 1.5rem;
 }
 
 .welcome-title,
 .player-greeting {
   margin: 0;
-  color: #e8edf7;
-  font-size: clamp(1.15rem, 4vw, 1.4rem);
-  font-weight: 650;
-  line-height: 1.35;
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.form-copy {
+  margin: -0.2rem 0 0.3rem;
+  color: var(--text-muted);
 }
 
 .player-greeting {
-  margin-top: 1rem;
+  margin-top: 1.1rem;
 }
 
 .player-form input {
   width: min(100%, 22rem);
-  min-height: 3.25rem;
-  padding: 0.8rem 1rem;
-  border: 1px solid var(--stroke);
-  border-radius: 0.65rem;
-  background: rgb(7 12 21 / 55%);
-  color: #f3f5fa;
+  min-height: 3.1rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #bdb29e;
+  border-radius: 0.35rem;
+  background: #fffdf7;
+  color: var(--ink);
   font: inherit;
 }
 
 .player-form input::placeholder {
-  color: #8996aa;
+  color: #918773;
 }
 
 .player-form input:focus-visible {
   border-color: var(--accent);
-  outline: 3px solid rgb(255 154 118 / 25%);
+  outline: 2px solid rgb(198 83 55 / 22%);
   outline-offset: 2px;
 }
 
@@ -273,105 +344,92 @@ onUnmounted(() => {
   clip-path: inset(50%);
 }
 
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0 0 1.1rem;
-  padding: 0.45rem 0.75rem;
-  border: 1px solid var(--stroke);
-  border-radius: 999px;
-  background: rgb(255 255 255 / 3%);
-  color: #c4cede;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.eyebrow span {
-  color: var(--accent);
-}
-
-h1 {
-  margin: 0;
-  background: linear-gradient(110deg, #ffffff 20%, #cbd6e8 80%);
-  background-clip: text;
-  color: transparent;
-  font-size: clamp(2.8rem, 10vw, 4.25rem);
-  font-weight: 800;
-  letter-spacing: -0.075em;
-  line-height: 1;
-}
-
 .instructions {
-  max-width: 26rem;
-  margin: 1.25rem auto 2rem;
+  max-width: 27rem;
+  margin: 1.2rem auto 1.5rem;
   color: var(--text-muted);
-  font-size: 1rem;
-  line-height: 1.7;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.05rem;
+  line-height: 1.55;
 }
 
 .start-button {
   min-width: 12rem;
   max-width: 100%;
-  padding: 0.9rem 1.5rem;
-  border: 0;
-  border-radius: 0.65rem;
-  background: linear-gradient(110deg, #ff765e, #f05e53);
-  color: #170d13;
+  padding: 0.85rem 1.35rem;
+  border: 1px solid #9c3d29;
+  border-radius: 0.35rem;
+  background: var(--accent);
+  color: #fffaf0;
   font: inherit;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 0.5rem 1.5rem rgb(255 102 83 / 20%), inset 0 1px rgb(255 255 255 / 25%);
-  transition: box-shadow 160ms ease, filter 160ms ease, transform 160ms ease;
+  box-shadow: 3px 3px 0 #8e3c2a;
+  transition: box-shadow 120ms ease, transform 120ms ease, background 120ms ease;
 }
 
 .start-button:hover {
-  filter: brightness(1.08);
-  box-shadow: 0 0.75rem 2rem rgb(255 102 83 / 28%), inset 0 1px rgb(255 255 255 / 30%);
-  transform: translateY(-2px);
+  background: #b94a31;
+  box-shadow: 1px 1px 0 #8e3c2a;
+  transform: translate(2px, 2px);
+}
+
+.start-button:active {
+  box-shadow: none;
+  transform: translate(3px, 3px);
 }
 
 .start-button:focus-visible {
-  outline: 3px solid var(--accent-bright);
-  outline-offset: 3px;
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
 }
 
 .replay-button {
-  margin-top: 1.25rem;
+  margin-top: 1rem;
+}
+
+.page-footer {
+  grid-area: footer;
+  padding-top: 0.3rem;
+  color: #89816f;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.85rem;
+  font-style: italic;
+  text-align: right;
 }
 
 @media (max-width: 480px) {
   .game-board {
-    padding: 1.25rem 1rem;
+    padding: 1.25rem 0.9rem;
   }
 
-  .game-card {
-    width: 100%;
-    padding: 2rem 1.25rem;
-    border-radius: 1.15rem;
+  .page-layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "header"
+      "game"
+      "scores"
+      "footer";
+    gap: 1.1rem;
   }
 
+  .page-header {
+    padding-top: 0.25rem;
+  }
+
+  .page-header h1 {
+    font-size: clamp(3rem, 16vw, 4.5rem);
+  }
+
+  .intro-copy {
+    max-width: 28rem;
+    font-size: 0.98rem;
+  }
+
+  .game-card,
   .game-card--results {
-    padding-block: 1.5rem;
-  }
-
-  .eyebrow {
-    gap: 0.4rem;
-    margin-bottom: 0.9rem;
-    padding: 0.4rem 0.65rem;
-    font-size: 0.68rem;
-    letter-spacing: 0.06em;
-  }
-
-  h1 {
-    font-size: clamp(2.6rem, 13vw, 3.5rem);
-  }
-
-  .instructions {
-    margin: 1rem auto 1.5rem;
-    font-size: 0.95rem;
+    padding: 1.2rem 1rem;
+    transform: none;
   }
 
   .start-button {
@@ -387,42 +445,14 @@ h1 {
     padding-inline: 0.75rem;
   }
 
-  .game-card {
-    padding: 1.75rem 1rem;
-  }
-}
-
-@media (max-height: 600px) and (orientation: landscape) {
-  .game-board {
-    place-items: start center;
-    padding-block: 1rem;
-  }
-
-  .game-card {
-    padding-block: 1.5rem;
-  }
-}
-
-@keyframes card-enter {
-  from {
-    opacity: 0;
-    transform: translateY(12px) scale(0.985);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+  .page-layout {
+    gap: 0.9rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .game-card {
-    animation: none;
-  }
-
   .start-button {
     transition: none;
   }
 }
-
 </style>
