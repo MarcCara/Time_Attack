@@ -77,9 +77,16 @@ function errorDeConnexio(error) {
   console.error('No s’ha pogut connectar amb el servidor Socket.IO:', error.message)
 }
 
+function rebreClassificacio(dades) {
+  console.log('Classificació rebuda:', dades)
+
+  store.actualitzarClassificacio(dades)
+}
+
 onMounted(() => {
   window.addEventListener('keydown', gestionarTeclaFisica)
   socket.on('connect', connectat)
+  socket.on('classificacio', rebreClassificacio)
   socket.on('connect_error', errorDeConnexio)
   socket.connect()
 })
@@ -87,6 +94,7 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('keydown', gestionarTeclaFisica)
   socket.off('connect', connectat)
+  socket.off('classificacio', rebreClassificacio)
   socket.off('connect_error', errorDeConnexio)
   socket.disconnect()
 })
