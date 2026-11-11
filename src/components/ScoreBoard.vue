@@ -11,49 +11,80 @@ const millorMarca = computed(() => {
 </script>
 
 <template>
-  <section class="scoreboard" aria-labelledby="scoreboard-title">
-    <h2 id="scoreboard-title">Historial de partidas</h2>
-    <p class="best-score">
-      Millor marca:
-      <strong>{{ millorMarca === null ? 'Sense partides' : `${millorMarca} s` }}</strong>
-    </p>
-    <p v-if="store.partides.length === 0" class="empty-message">
-      Encara no hi ha cap partida registrada.
-    </p>
-    <template v-else>
-      <div class="table-wrapper">
+  <div class="scoreboards">
+    <section class="scoreboard" aria-labelledby="scoreboard-title">
+      <h2 id="scoreboard-title">Historial de partidas</h2>
+      <p class="best-score">
+        Millor marca:
+        <strong>{{ millorMarca === null ? 'Sense partides' : `${millorMarca} s` }}</strong>
+      </p>
+      <p v-if="store.partides.length === 0" class="empty-message">
+        Encara no hi ha cap partida registrada.
+      </p>
+      <template v-else>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Partida</th>
+                <th scope="col">Jugador</th>
+                <th scope="col">Error total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="partida in store.partides" :key="partida.id">
+                <td>{{ partida.id }}</td>
+                <td>{{ partida.nom }}</td>
+                <td>{{ partida.errorTotal }} s</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </template>
+      <button
+        v-if="store.partides.length > 0"
+        class="clear-button"
+        type="button"
+        @click="store.esborrarPartides"
+      >
+        Esborrar historial
+      </button>
+    </section>
+
+    <section class="scoreboard" aria-labelledby="global-scoreboard-title">
+      <h2 id="global-scoreboard-title">Classificació global</h2>
+      <p v-if="store.classificacio.length === 0" class="empty-message">
+        Encara no hi ha resultats compartits.
+      </p>
+      <div v-else class="table-wrapper">
         <table>
           <thead>
             <tr>
-              <th scope="col">Partida</th>
               <th scope="col">Jugador</th>
               <th scope="col">Error total</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="partida in store.partides" :key="partida.id">
-              <td>{{ partida.id }}</td>
-              <td>{{ partida.nom }}</td>
-              <td>{{ partida.errorTotal }} s</td>
+            <tr v-for="(resultat, index) in store.classificacio" :key="index">
+              <td>{{ resultat.nom }}</td>
+              <td>{{ resultat.errorTotal }} s</td>
             </tr>
           </tbody>
         </table>
       </div>
-    </template>
-    <button
-      v-if="store.partides.length > 0"
-      class="clear-button"
-      type="button"
-      @click="store.esborrarPartides"
-    >
-      Esborrar historial
-    </button>
-  </section>
+    </section>
+  </div>
 </template>
 
 <style scoped>
+.scoreboards {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1.5rem;
+}
+
 .scoreboard {
-  margin: 1.5rem auto 0;
+  min-width: 0;
   padding: 1rem;
   border: 1px solid var(--stroke);
   border-radius: 0.9rem;
@@ -155,8 +186,12 @@ tbody td:last-child {
 
 @media (max-width: 480px) {
   .scoreboard {
-    margin-top: 1.1rem;
     padding: 0.75rem;
+  }
+
+  .scoreboards {
+    gap: 0.7rem;
+    margin-top: 1.1rem;
   }
 
   th,
