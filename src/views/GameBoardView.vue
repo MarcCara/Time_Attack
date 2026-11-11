@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useGameStore } from '@/stores/game'
+import { socket } from '@/services/socket'
 import KeyPad from '../components/KeyPad.vue'
 import ResultsTable from '../components/ResultsTable.vue'
 import ScoreBoard from '../components/ScoreBoard.vue'
@@ -68,12 +69,26 @@ function gestionarTeclaFisica(event) {
   rebreTecla(event.key.toUpperCase())
 }
 
+function connectat() {
+  console.log('Connectat al servidor!', socket.id)
+}
+
+function errorDeConnexio(error) {
+  console.error('No s’ha pogut connectar amb el servidor Socket.IO:', error.message)
+}
+
 onMounted(() => {
   window.addEventListener('keydown', gestionarTeclaFisica)
+  socket.on('connect', connectat)
+  socket.on('connect_error', errorDeConnexio)
+  socket.connect()
 })
 
 onUnmounted(() => {
   window.removeEventListener('keydown', gestionarTeclaFisica)
+  socket.off('connect', connectat)
+  socket.off('connect_error', errorDeConnexio)
+  socket.disconnect()
 })
 </script>
 
