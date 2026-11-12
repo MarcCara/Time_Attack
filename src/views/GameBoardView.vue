@@ -110,15 +110,14 @@ onUnmounted(() => {
   <main class="game-board">
     <div class="page-layout">
       <header class="page-header">
-        <p class="eyebrow"><span class="eyebrow-mark" aria-hidden="true">✳</span> Un joc de precisió</p>
-        <h1 id="game-title">Time <span>Attack</span></h1>
-        <p class="intro-copy">Confia en el teu ritme. Prem cada tecla quan creguis que ha passat el temps.</p>
+        <p class="eyebrow">Joc de precisió</p>
+        <h1 id="game-title">Time Attack</h1>
+        <p class="intro-copy">Prem cada tecla quan creguis que ha passat el temps.</p>
       </header>
 
       <section class="game-card" :class="{ 'game-card--results': partidaAcabada }" aria-labelledby="game-title">
         <div class="card-topline">
           <span>{{ jugant ? 'Partida en curs' : partidaAcabada ? 'Partida acabada' : 'A punt?' }}</span>
-          <span class="card-index">Núm. 01</span>
         </div>
         <form v-if="!store.nomJugador" class="player-form" @submit.prevent="entrar">
           <h2 class="welcome-title">Com et dius?</h2>
@@ -165,7 +164,6 @@ onUnmounted(() => {
       </section>
 
       <ScoreBoard />
-      <footer class="page-footer">Una mica de sort. Molta intuïció.</footer>
     </div>
   </main>
 </template>
