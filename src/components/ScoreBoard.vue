@@ -88,37 +88,32 @@ const classificacioOrdenada = computed(() =>
 <style scoped>
 .scoreboards {
   display: grid;
-  grid-area: scores;
-  gap: 0.85rem;
+  gap: 0.75rem;
 }
 
 .scoreboard {
   min-width: 0;
-  padding: 1rem 1.1rem;
-  border: 1px solid #d1c5b0;
-  border-radius: 0.65rem 0.8rem 0.55rem 0.75rem;
-  background: rgb(255 250 240 / 86%);
-  box-shadow: 2px 3px 0 #d3c7b2;
+  padding: 1rem;
+  border: 1px solid var(--stroke);
+  border-radius: 0.6rem;
+  background: var(--paper);
   text-align: left;
 }
 
 h2 {
   margin: 0 0 0.7rem;
   padding-bottom: 0.55rem;
-  border-bottom: 1px solid #e1d7c5;
+  border-bottom: 1px solid var(--stroke);
   color: var(--ink);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
 }
 
 .empty-message,
 .best-score {
   margin: 0;
   color: var(--text-muted);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   text-align: left;
 }
 
@@ -144,7 +139,7 @@ table {
 th,
 td {
   padding: 0.55rem 0.45rem;
-  border-bottom: 1px solid #e5ddce;
+  border-bottom: 1px solid var(--stroke);
 }
 
 th {
@@ -172,11 +167,11 @@ tbody td:last-child {
 }
 
 .top-result {
-  background: #e9eddc;
+  background: #eef1e8;
 }
 
 .top-result td {
-  color: #465437;
+  color: #4f5b41;
   font-weight: 700;
 }
 
@@ -188,8 +183,8 @@ tbody td:last-child {
   display: block;
   margin: 0.75rem 0 0 auto;
   padding: 0.45rem 0.7rem;
-  border: 1px solid #d1c5b0;
-  border-radius: 0.3rem;
+  border: 1px solid var(--stroke);
+  border-radius: 0.35rem;
   background: transparent;
   color: var(--text-muted);
   font: inherit;
@@ -214,11 +209,6 @@ tbody td:last-child {
     padding: 0.75rem;
   }
 
-  .scoreboards {
-    gap: 0.7rem;
-    margin-top: 1.1rem;
-  }
-
   th,
   td {
     padding: 0.5rem 0.35rem;
@@ -226,13 +216,6 @@ tbody td:last-child {
 
   td {
     font-size: 0.8rem;
-  }
-}
-
-@media (min-width: 481px) and (max-width: 760px) {
-  .scoreboards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-column: 1 / -1;
   }
 }
 </style>

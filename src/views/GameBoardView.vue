@@ -172,117 +172,60 @@ onUnmounted(() => {
 .game-board {
   min-height: 100vh;
   min-height: 100svh;
-  padding: clamp(1.5rem, 5vw, 4rem) 1.25rem;
+  padding: 2rem 1rem;
 }
 
 .page-layout {
   display: grid;
-  width: min(100%, 68rem);
-  grid-template-columns: minmax(0, 1.05fr) minmax(19rem, 0.95fr);
-  grid-template-areas:
-    "header header"
-    "game scores"
-    "footer footer";
-  align-items: start;
-  gap: 1.4rem 2rem;
+  width: min(100%, 48rem);
+  gap: 1.25rem;
   margin: 0 auto;
 }
 
 .page-header {
-  position: relative;
-  grid-area: header;
-  padding: 1rem 0 0.75rem;
-  border-bottom: 1px solid #c9bda7;
-}
-
-.page-header::after {
-  position: absolute;
-  right: 0.25rem;
-  bottom: -0.65rem;
-  width: 4.5rem;
-  height: 1rem;
-  border-top: 2px solid var(--accent);
-  border-radius: 50%;
-  content: "";
-  transform: rotate(-4deg);
+  padding: 0.5rem 0 0.25rem;
 }
 
 .eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  margin: 0 0 0.45rem;
+  margin: 0 0 0.25rem;
   color: var(--olive);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.eyebrow-mark {
-  color: var(--accent);
-  font-size: 1.1rem;
-  line-height: 1;
+  font-size: 0.85rem;
 }
 
 .page-header h1 {
   margin: 0;
   color: var(--ink);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(3rem, 8vw, 5.8rem);
+  font-size: clamp(2.2rem, 7vw, 3rem);
   font-weight: 700;
-  letter-spacing: -0.075em;
-  line-height: 0.95;
-}
-
-.page-header h1 span {
-  color: var(--accent);
-  font-style: italic;
-  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
 }
 
 .intro-copy {
-  margin: 0.75rem 0 0;
+  margin: 0.45rem 0 0;
   color: var(--text-muted);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.05rem;
+  font-size: 1rem;
 }
 
 .game-card {
-  position: relative;
-  grid-area: game;
   min-width: 0;
-  padding: clamp(1.25rem, 3vw, 2.25rem);
-  border: 1px solid #cfc2ac;
-  border-radius: 0.85rem 0.75rem 0.95rem 0.7rem;
+  padding: 1.5rem;
+  border: 1px solid var(--stroke);
+  border-radius: 0.65rem;
   background: var(--paper);
-  box-shadow: 5px 6px 0 #cbbda5;
+  box-shadow: 0 2px 6px rgb(40 45 50 / 5%);
   text-align: center;
-  transform: rotate(-0.25deg);
 }
 
 .game-card--results {
-  padding-block: 1.35rem;
+  padding-block: 1.25rem;
 }
 
 .card-topline {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px dashed #d1c5b0;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--stroke);
   color: var(--olive);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.11em;
-  text-align: left;
-  text-transform: uppercase;
-}
-
-.card-index {
-  color: #a49a87;
-  font-size: 0.65rem;
+  font-size: 0.8rem;
 }
 
 .player-form {
@@ -296,9 +239,8 @@ onUnmounted(() => {
 .player-greeting {
   margin: 0;
   color: var(--ink);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: 600;
+  font-size: 1.35rem;
+  font-weight: 650;
   line-height: 1.2;
 }
 
@@ -313,22 +255,22 @@ onUnmounted(() => {
 
 .player-form input {
   width: min(100%, 22rem);
-  min-height: 3.1rem;
-  padding: 0.75rem 0.9rem;
-  border: 1px solid #bdb29e;
-  border-radius: 0.35rem;
-  background: #fffdf7;
+  min-height: 3rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--stroke);
+  border-radius: 0.4rem;
+  background: var(--paper);
   color: var(--ink);
   font: inherit;
 }
 
 .player-form input::placeholder {
-  color: #918773;
+  color: #8a8e91;
 }
 
 .player-form input:focus-visible {
   border-color: var(--accent);
-  outline: 2px solid rgb(198 83 55 / 22%);
+  outline: 2px solid rgb(169 76 55 / 18%);
   outline-offset: 2px;
 }
 
@@ -344,90 +286,55 @@ onUnmounted(() => {
 
 .instructions {
   max-width: 27rem;
-  margin: 1.2rem auto 1.5rem;
+  margin: 1rem auto 1.25rem;
   color: var(--text-muted);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.05rem;
-  line-height: 1.55;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 .start-button {
   min-width: 12rem;
   max-width: 100%;
-  padding: 0.85rem 1.35rem;
-  border: 1px solid #9c3d29;
-  border-radius: 0.35rem;
+  padding: 0.8rem 1.25rem;
+  border: 0;
+  border-radius: 0.4rem;
   background: var(--accent);
-  color: #fffaf0;
+  color: #fff;
   font: inherit;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 3px 3px 0 #8e3c2a;
-  transition: box-shadow 120ms ease, transform 120ms ease, background 120ms ease;
+  transition: background 120ms ease;
 }
 
 .start-button:hover {
-  background: #b94a31;
-  box-shadow: 1px 1px 0 #8e3c2a;
-  transform: translate(2px, 2px);
-}
-
-.start-button:active {
-  box-shadow: none;
-  transform: translate(3px, 3px);
+  background: #93412f;
 }
 
 .start-button:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 4px;
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 .replay-button {
-  margin-top: 1rem;
-}
-
-.page-footer {
-  grid-area: footer;
-  padding-top: 0.3rem;
-  color: #89816f;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.85rem;
-  font-style: italic;
-  text-align: right;
+  margin-top: 0.9rem;
 }
 
 @media (max-width: 480px) {
   .game-board {
-    padding: 1.25rem 0.9rem;
+    padding: 1.25rem 0.85rem;
   }
 
   .page-layout {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "header"
-      "game"
-      "scores"
-      "footer";
-    gap: 1.1rem;
-  }
-
-  .page-header {
-    padding-top: 0.25rem;
+    gap: 1rem;
   }
 
   .page-header h1 {
-    font-size: clamp(3rem, 16vw, 4.5rem);
-  }
-
-  .intro-copy {
-    max-width: 28rem;
-    font-size: 0.98rem;
+    font-size: 2.4rem;
   }
 
   .game-card,
   .game-card--results {
-    padding: 1.2rem 1rem;
-    transform: none;
+    padding: 1.15rem 1rem;
   }
 
   .start-button {
@@ -444,7 +351,7 @@ onUnmounted(() => {
   }
 
   .page-layout {
-    gap: 0.9rem;
+    gap: 0.85rem;
   }
 }
 

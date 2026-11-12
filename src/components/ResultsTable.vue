@@ -34,9 +34,9 @@ defineProps({
 .table-wrapper {
   margin: 1.15rem -0.25rem 0;
   overflow-x: auto;
-  border: 1px solid #d5c9b4;
-  border-radius: 0.4rem;
-  background: #fffdf7;
+  border: 1px solid var(--stroke);
+  border-radius: 0.5rem;
+  background: var(--paper);
 }
 
 table {
@@ -49,11 +49,11 @@ table {
 th,
 td {
   padding: 0.6rem 0.65rem;
-  border-bottom: 1px solid #e6dece;
+  border-bottom: 1px solid var(--stroke);
 }
 
 th {
-  background: #f1e9d8;
+  background: var(--paper-shade);
   color: var(--text-muted);
   font-size: 0.75rem;
   font-weight: 600;
